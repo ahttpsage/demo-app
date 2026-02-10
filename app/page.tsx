@@ -241,6 +241,12 @@ export default function Home() {
       <footer className="relative py-8 px-6 border-t border-cyan-500/20">
         <div className="container mx-auto text-center text-gray-400">
           <p>&copy; 2026 Priyatosh. All rights reserved.</p>
+          <a 
+            href="/admin/login" 
+            className="inline-block mt-3 text-sm text-gray-500 hover:text-cyan-400 transition-colors opacity-50 hover:opacity-100"
+          >
+            Admin Portal
+          </a>
         </div>
       </footer>
     </div>
