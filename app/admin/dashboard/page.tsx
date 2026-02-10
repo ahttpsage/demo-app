@@ -16,6 +16,7 @@ export default function AdminDashboard() {
   const [withdrawAmount, setWithdrawAmount] = useState("");
   const [showWithdrawModal, setShowWithdrawModal] = useState(false);
   const [withdrawSuccess, setWithdrawSuccess] = useState(false);
+  const [hoveredIndex, setHoveredIndex] = useState<number | null>(null);
 
   useEffect(() => {
     // Check authentication
@@ -171,55 +172,233 @@ export default function AdminDashboard() {
 
           {/* Revenue Chart */}
           <div className="bg-slate-900/50 backdrop-blur-lg border border-cyan-500/20 rounded-xl p-6 mb-8">
-            <h2 className="text-2xl font-bold text-white mb-6">Revenue Trends</h2>
+            <div className="flex justify-between items-center mb-6">
+              <h2 className="text-2xl font-bold text-white">Revenue Trends</h2>
+              <button
+                onClick={generateRevenueData}
+                className="px-4 py-2 bg-cyan-500/20 border border-cyan-500/30 rounded-lg text-cyan-400 hover:bg-cyan-500/30 transition-all text-sm"
+              >
+                🔄 Refresh Data
+              </button>
+            </div>
             
-            <div className="relative h-80">
+            <div className="relative h-96">
               {/* Y-axis labels */}
-              <div className="absolute left-0 top-0 bottom-8 flex flex-col justify-between text-gray-400 text-sm">
-                <div>${maxRevenue}</div>
-                <div>${(maxRevenue * 0.75).toFixed(0)}</div>
-                <div>${(maxRevenue * 0.5).toFixed(0)}</div>
-                <div>${(maxRevenue * 0.25).toFixed(0)}</div>
+              <div className="absolute left-0 top-0 bottom-16 flex flex-col justify-between text-gray-400 text-sm font-medium">
+                <div>${maxRevenue.toLocaleString()}</div>
+                <div>${((maxRevenue * 0.75)).toLocaleString()}</div>
+                <div>${((maxRevenue * 0.5)).toLocaleString()}</div>
+                <div>${((maxRevenue * 0.25)).toLocaleString()}</div>
                 <div>$0</div>
               </div>
 
-              {/* Chart area */}
-              <div className="ml-16 h-full flex items-end justify-around pb-8">
-                {revenueData.map((data, index) => {
-                  const heightPercent = (data.revenue / maxRevenue) * 100;
-                  const isGrowth = index > 0 && data.revenue >= revenueData[index - 1].revenue;
-                  
-                  return (
-                    <div key={data.month} className="flex flex-col items-center flex-1 mx-2">
-                      {/* Bar */}
-                      <div className="w-full flex flex-col justify-end h-full relative group">
-                        <div
-                          className={`w-full rounded-t-lg transition-all hover:opacity-80 cursor-pointer ${
-                            isGrowth
-                              ? 'bg-gradient-to-t from-green-600 to-green-400'
-                              : 'bg-gradient-to-t from-red-600 to-red-400'
-                          }`}
-                          style={{ height: `${heightPercent}%` }}
-                        >
-                          {/* Tooltip */}
-                          <div className="absolute bottom-full mb-2 left-1/2 transform -translate-x-1/2 bg-slate-800 border border-cyan-500/30 rounded-lg px-3 py-2 opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap">
-                            <div className="text-white font-semibold">${data.revenue.toLocaleString()}</div>
-                            <div className="text-gray-400 text-xs">{data.month}</div>
-                          </div>
-                        </div>
-                      </div>
-                      
-                      {/* Label */}
-                      <div className="text-gray-400 text-sm mt-2 whitespace-nowrap">
-                        {data.month}
-                      </div>
-                    </div>
-                  );
-                })}
+              {/* Grid lines */}
+              <div className="absolute left-20 right-4 top-0 bottom-16 flex flex-col justify-between">
+                {[0, 1, 2, 3, 4].map((i) => (
+                  <div key={i} className="border-t border-cyan-500/10"></div>
+                ))}
               </div>
 
-              {/* X-axis line */}
-              <div className="absolute bottom-0 left-16 right-0 h-px bg-cyan-500/20"></div>
+              {/* Chart area with SVG line */}
+              <div className="ml-20 mr-4 h-full pb-16 relative">
+                <svg 
+                  className="absolute inset-0 w-full h-full overflow-visible" 
+                  style={{ height: 'calc(100% - 4rem)' }}
+                >
+                  <defs>
+                    {/* Gradient for area under line */}
+                    <linearGradient id="areaGradient" x1="0%" y1="0%" x2="0%" y2="100%">
+                      <stop offset="0%" stopColor="#06b6d4" stopOpacity="0.3" />
+                      <stop offset="100%" stopColor="#06b6d4" stopOpacity="0.0" />
+                    </linearGradient>
+                    
+                    {/* Glow effect */}
+                    <filter id="glow">
+                      <feGaussianBlur stdDeviation="3" result="coloredBlur"/>
+                      <feMerge>
+                        <feMergeNode in="coloredBlur"/>
+                        <feMergeNode in="SourceGraphic"/>
+                      </feMerge>
+                    </filter>
+                  </defs>
+
+                  {/* Area fill under the line */}
+                  <path
+                    d={`
+                      M 0,100%
+                      ${revenueData.map((data, index) => {
+                        const x = ((index) / (revenueData.length - 1)) * 100;
+                        const y = 100 - (data.revenue / maxRevenue) * 100;
+                        return `L ${x}%,${y}%`;
+                      }).join(' ')}
+                      L 100%,100%
+                      Z
+                    `}
+                    fill="url(#areaGradient)"
+                    className="transition-all duration-500"
+                  />
+
+                  {/* Main line path */}
+                  <path
+                    d={revenueData.map((data, index) => {
+                      const x = ((index) / (revenueData.length - 1)) * 100;
+                      const y = 100 - (data.revenue / maxRevenue) * 100;
+                      return `${index === 0 ? 'M' : 'L'} ${x}%,${y}%`;
+                    }).join(' ')}
+                    fill="none"
+                    stroke="#06b6d4"
+                    strokeWidth="3"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    className="transition-all duration-500"
+                    style={{ filter: 'url(#glow)' }}
+                  />
+
+                  {/* Segment colors for growth/loss */}
+                  {revenueData.map((data, index) => {
+                    if (index === revenueData.length - 1) return null;
+                    
+                    const x1 = ((index) / (revenueData.length - 1)) * 100;
+                    const x2 = ((index + 1) / (revenueData.length - 1)) * 100;
+                    const y1 = 100 - (data.revenue / maxRevenue) * 100;
+                    const y2 = 100 - (revenueData[index + 1].revenue / maxRevenue) * 100;
+                    
+                    const isGrowth = revenueData[index + 1].revenue >= data.revenue;
+                    
+                    return (
+                      <line
+                        key={`segment-${index}`}
+                        x1={`${x1}%`}
+                        y1={`${y1}%`}
+                        x2={`${x2}%`}
+                        y2={`${y2}%`}
+                        stroke={isGrowth ? '#22c55e' : '#ef4444'}
+                        strokeWidth={hoveredIndex === index || hoveredIndex === index + 1 ? "4" : "3"}
+                        strokeLinecap="round"
+                        className="transition-all duration-300"
+                        opacity={hoveredIndex === null ? "0.7" : (hoveredIndex === index || hoveredIndex === index + 1) ? "1" : "0.3"}
+                      />
+                    );
+                  })}
+                  
+                  {/* Interactive data points */}
+                  {revenueData.map((data, index) => {
+                    const x = ((index) / (revenueData.length - 1)) * 100;
+                    const y = 100 - (data.revenue / maxRevenue) * 100;
+                    const isGrowth = index > 0 && data.revenue >= revenueData[index - 1].revenue;
+                    const isHovered = hoveredIndex === index;
+                    
+                    return (
+                      <g key={`point-${index}`} className="cursor-pointer">
+                        {/* Hover area (invisible but clickable) */}
+                        <circle
+                          cx={`${x}%`}
+                          cy={`${y}%`}
+                          r="20"
+                          fill="transparent"
+                          onMouseEnter={() => setHoveredIndex(index)}
+                          onMouseLeave={() => setHoveredIndex(null)}
+                        />
+                        
+                        {/* Animated pulse on hover */}
+                        {isHovered && (
+                          <circle
+                            cx={`${x}%`}
+                            cy={`${y}%`}
+                            r="15"
+                            fill={isGrowth ? '#22c55e' : '#ef4444'}
+                            opacity="0.2"
+                            className="animate-ping"
+                          />
+                        )}
+                        
+                        {/* Outer glow */}
+                        <circle
+                          cx={`${x}%`}
+                          cy={`${y}%`}
+                          r={isHovered ? "12" : "8"}
+                          fill={isGrowth ? '#22c55e' : '#ef4444'}
+                          opacity="0.3"
+                          className="transition-all duration-300"
+                        />
+                        
+                        {/* Main point */}
+                        <circle
+                          cx={`${x}%`}
+                          cy={`${y}%`}
+                          r={isHovered ? "8" : "6"}
+                          fill={isGrowth ? '#22c55e' : '#ef4444'}
+                          className="transition-all duration-300"
+                          style={{ filter: isHovered ? 'url(#glow)' : 'none' }}
+                        />
+                        
+                        {/* Center dot */}
+                        <circle
+                          cx={`${x}%`}
+                          cy={`${y}%`}
+                          r={isHovered ? "3" : "2"}
+                          fill="white"
+                          className="transition-all duration-300"
+                        />
+                      </g>
+                    );
+                  })}
+                </svg>
+
+                {/* X-axis labels and tooltips */}
+                <div className="absolute bottom-0 left-0 right-0 flex justify-between items-end">
+                  {revenueData.map((data, index) => {
+                    const isGrowth = index > 0 && data.revenue >= revenueData[index - 1].revenue;
+                    const change = index > 0 ? data.revenue - revenueData[index - 1].revenue : 0;
+                    
+                    return (
+                      <div 
+                        key={data.month} 
+                        className="flex flex-col items-center flex-1 relative"
+                        onMouseEnter={() => setHoveredIndex(index)}
+                        onMouseLeave={() => setHoveredIndex(null)}
+                      >
+                        {/* Tooltip */}
+                        <div 
+                          className={`absolute bottom-full mb-12 left-1/2 transform -translate-x-1/2 bg-slate-800 border border-cyan-500/50 rounded-lg px-4 py-3 whitespace-nowrap z-20 transition-all duration-300 ${
+                            hoveredIndex === index ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-2 pointer-events-none'
+                          }`}
+                        >
+                          <div className="text-white font-bold text-lg mb-1">
+                            ${data.revenue.toLocaleString()}
+                          </div>
+                          <div className="text-gray-400 text-sm mb-1">{data.month}</div>
+                          {index > 0 && (
+                            <div className={`text-sm font-semibold ${isGrowth ? 'text-green-400' : 'text-red-400'}`}>
+                              {isGrowth ? '↑' : '↓'} ${Math.abs(change).toLocaleString()}
+                              <span className="text-xs ml-1">
+                                ({((change / revenueData[index - 1].revenue) * 100).toFixed(1)}%)
+                              </span>
+                            </div>
+                          )}
+                          {/* Arrow pointer */}
+                          <div className="absolute top-full left-1/2 transform -translate-x-1/2 -mt-px">
+                            <div className="border-4 border-transparent border-t-slate-800"></div>
+                          </div>
+                        </div>
+                        
+                        {/* Label */}
+                        <div 
+                          className={`text-sm whitespace-nowrap cursor-pointer transition-all duration-300 font-medium ${
+                            hoveredIndex === index ? 'text-cyan-400 scale-110' : 'text-gray-400'
+                          }`}
+                        >
+                          {data.month}
+                        </div>
+                      </div>
+                    );
+                  })}
+                </div>
+              </div>
+
+              {/* Axis lines */}
+              <div className="absolute bottom-16 left-20 right-4 h-0.5 bg-gradient-to-r from-cyan-500/50 to-cyan-500/10"></div>
+              <div className="absolute top-0 bottom-16 left-20 w-0.5 bg-gradient-to-b from-cyan-500/50 to-cyan-500/10"></div>
             </div>
           </div>
 

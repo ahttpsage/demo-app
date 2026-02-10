@@ -74,7 +74,7 @@ export default function Home() {
             <div className="text-2xl font-bold bg-gradient-to-r from-cyan-400 to-blue-500 bg-clip-text text-transparent">
               Priyatosh
             </div>
-            <div className="hidden md:flex space-x-8">
+            <div className="hidden md:flex space-x-8 items-center">
               {["home", "about", "services", "skills", "contact"].map((section) => (
                 <button
                   key={section}
@@ -88,6 +88,12 @@ export default function Home() {
                   {section}
                 </button>
               ))}
+              <a
+                href="/admin/login"
+                className="px-4 py-2 border border-cyan-500/50 text-cyan-400 rounded-lg hover:bg-cyan-500/10 transition-all text-sm"
+              >
+                Admin
+              </a>
             </div>
           </div>
         </div>
