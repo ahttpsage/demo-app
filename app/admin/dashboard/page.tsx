@@ -38,23 +38,27 @@ export default function AdminDashboard() {
     ];
 
     const data: RevenueData[] = [];
-    let currentRevenue = 0;
-
-    months.forEach((month) => {
-      // Random change between -800 and +1200
-      const change = Math.random() * 2000 - 800;
-      currentRevenue = Math.max(0, Math.min(5800, currentRevenue + change));
+    
+    // Start with a base revenue and apply small variations
+    const baseRevenues = [1850, 1950, 2000];
+    
+    months.forEach((month, index) => {
+      // Small random variation between -50 and +50
+      const variation = Math.random() * 100 - 50;
+      const revenue = baseRevenues[index] + variation;
       
       data.push({
         month,
-        revenue: Math.round(currentRevenue)
+        revenue: Math.round(revenue)
       });
     });
 
     setRevenueData(data);
     
-    // Set balance to the latest revenue
-    const totalBalance = data[data.length - 1].revenue;
+    // Set balance to stay between 1900-2100 with small variation
+    const baseBalance = 2000;
+    const variation = Math.random() * 200 - 100; // -100 to +100
+    const totalBalance = Math.round(baseBalance + variation);
     setBalance(totalBalance);
   };
 
