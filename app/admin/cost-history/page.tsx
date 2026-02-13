@@ -35,14 +35,14 @@ export default function CostHistory() {
       {
         id: "1",
         date: "2026-02-10",
-        amount: 220.50,
+        amount: 220.67,
         category: "Operating Expense",
         description: "Monthly hosting and infrastructure costs"
       },
       {
         id: "2",
         date: "2026-02-05",
-        amount: 95.75,
+        amount: 95.89,
         category: "Software",
         description: "API subscriptions and cloud services"
       },
@@ -51,14 +51,14 @@ export default function CostHistory() {
       {
         id: "3",
         date: "2026-01-25",
-        amount: 180.25,
+        amount: 180.23,
         category: "Tools",
         description: "Development tools and licenses"
       },
       {
         id: "4",
         date: "2026-01-15",
-        amount: 120.80,
+        amount: 120.78,
         category: "Software",
         description: "AI API usage and compute credits"
       },
@@ -74,14 +74,14 @@ export default function CostHistory() {
       {
         id: "6",
         date: "2025-12-20",
-        amount: 150.60,
+        amount: 150.56,
         category: "Software",
         description: "Annual software license renewals"
       },
       {
         id: "7",
         date: "2025-12-10",
-        amount: 110.90,
+        amount: 110.92,
         category: "Operating Expense",
         description: "Cloud infrastructure and storage"
       },
@@ -90,14 +90,14 @@ export default function CostHistory() {
       {
         id: "8",
         date: "2025-11-22",
-        amount: 95.35,
+        amount: 95.34,
         category: "Tools",
         description: "Development tools subscription"
       },
       {
         id: "9",
         date: "2025-11-08",
-        amount: 75.00,
+        amount: 75.12,
         category: "Operating Expense",
         description: "Domain and SSL certificates"
       },
@@ -106,14 +106,14 @@ export default function CostHistory() {
       {
         id: "10",
         date: "2025-10-18",
-        amount: 130.40,
+        amount: 130.43,
         category: "Software",
         description: "API subscriptions and monitoring tools"
       },
       {
         id: "11",
         date: "2025-10-05",
-        amount: 90.65,
+        amount: 90.61,
         category: "Operating Expense",
         description: "Monthly hosting and backup services"
       },
@@ -122,28 +122,28 @@ export default function CostHistory() {
       {
         id: "12",
         date: "2025-09-25",
-        amount: 600.00,
+        amount: 599.89,
         category: "Infrastructure",
         description: "Server upgrades and cloud migration"
       },
       {
         id: "13",
         date: "2025-09-18",
-        amount: 450.75,
+        amount: 450.67,
         category: "Tools",
         description: "Development tools and professional licenses"
       },
       {
         id: "14",
         date: "2025-09-12",
-        amount: 300.50,
+        amount: 300.56,
         category: "Software",
         description: "AI API credits and computing resources"
       },
       {
         id: "15",
         date: "2025-09-05",
-        amount: 150.25,
+        amount: 150.23,
         category: "Operating Expense",
         description: "Enhanced hosting and security upgrades"
       }

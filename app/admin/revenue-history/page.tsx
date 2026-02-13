@@ -29,42 +29,86 @@ export default function RevenueHistory() {
   }, [router]);
 
   const loadRevenueData = () => {
-    // Sample revenue data
+    // Revenue data from October 2025 to February 2026 - Total: $5820
     const entries: RevenueEntry[] = [
+      // February 2026 - Total: $2000
       {
         id: "1",
         date: "2026-02-15",
-        amount: 5000.00,
+        amount: 1250.89,
         source: "Client Project",
         description: "AI Consulting - Financial Model Development"
       },
       {
         id: "2",
         date: "2026-02-08",
-        amount: 3500.50,
-        source: "Client Project",
+        amount: 749.11,
+        source: "Consulting",
         description: "Quantitative Analysis - Trading Strategy"
       },
+      
+      // January 2026 - Total: $1200
       {
         id: "3",
         date: "2026-01-28",
-        amount: 4200.75,
+        amount: 680.56,
         source: "Client Project",
         description: "Machine Learning Model - NLP System"
       },
       {
         id: "4",
         date: "2026-01-15",
-        amount: 2800.25,
+        amount: 519.44,
         source: "Consulting",
         description: "Gen AI Solutions - RAG Implementation"
       },
+      
+      // December 2025 - Total: $1000
       {
         id: "5",
-        date: "2025-12-20",
-        amount: 6000.00,
+        date: "2025-12-22",
+        amount: 625.78,
         source: "Client Project",
         description: "Full Stack Development - Trading Dashboard"
+      },
+      {
+        id: "6",
+        date: "2025-12-10",
+        amount: 374.22,
+        source: "Consulting",
+        description: "Algorithm Optimization Services"
+      },
+      
+      // November 2025 - Total: $900
+      {
+        id: "7",
+        date: "2025-11-25",
+        amount: 550.67,
+        source: "Client Project",
+        description: "Data Analysis Pipeline Development"
+      },
+      {
+        id: "8",
+        date: "2025-11-12",
+        amount: 349.33,
+        source: "Consulting",
+        description: "Technical Architecture Consultation"
+      },
+      
+      // October 2025 - Total: $720
+      {
+        id: "9",
+        date: "2025-10-28",
+        amount: 420.34,
+        source: "Client Project",
+        description: "Predictive Analytics Model"
+      },
+      {
+        id: "10",
+        date: "2025-10-15",
+        amount: 299.66,
+        source: "Consulting",
+        description: "Quantitative Strategy Development"
       }
     ];
 
