@@ -403,7 +403,7 @@ export default function AdminDashboard() {
           </div>
 
           {/* Actions */}
-          <div className="grid md:grid-cols-2 gap-6">
+          <div className="grid md:grid-cols-2 gap-6 mb-8">
             {/* Show Balance */}
             <div className="bg-slate-900/50 backdrop-blur-lg border border-cyan-500/20 rounded-xl p-6">
               <h3 className="text-xl font-bold text-white mb-4">Balance Details</h3>
@@ -435,6 +435,39 @@ export default function AdminDashboard() {
               >
                 Withdraw Funds
               </button>
+            </div>
+          </div>
+
+          {/* History Links */}
+          <div className="grid md:grid-cols-2 gap-6">
+            {/* Revenue History */}
+            <div className="bg-slate-900/50 backdrop-blur-lg border border-cyan-500/20 rounded-xl p-6 hover:border-cyan-500/40 transition-all group cursor-pointer"
+                 onClick={() => router.push("/admin/revenue-history")}>
+              <div className="flex items-center justify-between mb-4">
+                <h3 className="text-xl font-bold text-white">Revenue History</h3>
+                <div className="text-2xl group-hover:scale-110 transition-transform">📈</div>
+              </div>
+              <p className="text-gray-400 mb-4">
+                View detailed revenue records and income sources
+              </p>
+              <div className="text-cyan-400 font-semibold group-hover:translate-x-2 transition-transform inline-flex items-center">
+                View History →
+              </div>
+            </div>
+
+            {/* Cost History */}
+            <div className="bg-slate-900/50 backdrop-blur-lg border border-cyan-500/20 rounded-xl p-6 hover:border-cyan-500/40 transition-all group cursor-pointer"
+                 onClick={() => router.push("/admin/cost-history")}>
+              <div className="flex items-center justify-between mb-4">
+                <h3 className="text-xl font-bold text-white">Cost History</h3>
+                <div className="text-2xl group-hover:scale-110 transition-transform">💸</div>
+              </div>
+              <p className="text-gray-400 mb-4">
+                Track expenses and cost breakdown by category
+              </p>
+              <div className="text-cyan-400 font-semibold group-hover:translate-x-2 transition-transform inline-flex items-center">
+                View History →
+              </div>
             </div>
           </div>
         </div>
