@@ -57,12 +57,6 @@ export default function AdminDashboard() {
     });
 
     setRevenueData(data);
-    
-    // Set balance to stay between 1900-2100 with small variation
-    const baseBalance = 2000;
-    const balanceVariation = Math.random() * 200 - 100; // -100 to +100
-    const totalBalance = Math.round(baseBalance + balanceVariation);
-    setBalance(totalBalance);
 
     // Calculate total revenue (Oct 2025 - Feb 2026): Target around $5800-$5900
     const baseTotalRevenue = 5850;
@@ -79,6 +73,9 @@ export default function AdminDashboard() {
     // Net profit should be between $2900-$3100
     const calculatedNetProfit = calculatedTotalRevenue - calculatedTotalCosts;
     setNetProfit(calculatedNetProfit);
+    
+    // Current balance equals net profit
+    setBalance(calculatedNetProfit);
   };
 
   const handleLogout = () => {
