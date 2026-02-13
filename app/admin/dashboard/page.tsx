@@ -13,6 +13,9 @@ export default function AdminDashboard() {
   const [mounted, setMounted] = useState(false);
   const [revenueData, setRevenueData] = useState<RevenueData[]>([]);
   const [balance, setBalance] = useState(0);
+  const [totalRevenue, setTotalRevenue] = useState(0);
+  const [totalCosts, setTotalCosts] = useState(0);
+  const [netProfit, setNetProfit] = useState(0);
   const [withdrawAmount, setWithdrawAmount] = useState("");
   const [showWithdrawModal, setShowWithdrawModal] = useState(false);
   const [withdrawSuccess, setWithdrawSuccess] = useState(false);
@@ -57,9 +60,25 @@ export default function AdminDashboard() {
     
     // Set balance to stay between 1900-2100 with small variation
     const baseBalance = 2000;
-    const variation = Math.random() * 200 - 100; // -100 to +100
-    const totalBalance = Math.round(baseBalance + variation);
+    const balanceVariation = Math.random() * 200 - 100; // -100 to +100
+    const totalBalance = Math.round(baseBalance + balanceVariation);
     setBalance(totalBalance);
+
+    // Calculate total revenue (Oct 2025 - Feb 2026): Target around $5800-$5900
+    const baseTotalRevenue = 5850;
+    const revenueVariation = Math.random() * 100 - 50; // -50 to +50
+    const calculatedTotalRevenue = Math.round(baseTotalRevenue + revenueVariation);
+    setTotalRevenue(calculatedTotalRevenue);
+
+    // Calculate total costs (Sept 2025 - Feb 2026): Around $2850-$2900
+    const baseTotalCosts = 2875;
+    const costsVariation = Math.random() * 50 - 25; // -25 to +25
+    const calculatedTotalCosts = Math.round(baseTotalCosts + costsVariation);
+    setTotalCosts(calculatedTotalCosts);
+
+    // Net profit should be between $2900-$3100
+    const calculatedNetProfit = calculatedTotalRevenue - calculatedTotalCosts;
+    setNetProfit(calculatedNetProfit);
   };
 
   const handleLogout = () => {
@@ -142,7 +161,7 @@ export default function AdminDashboard() {
           )}
 
           {/* Stats Cards */}
-          <div className="grid md:grid-cols-3 gap-6 mb-8">
+          <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
             {/* Current Balance */}
             <div className="bg-slate-900/50 backdrop-blur-lg border border-cyan-500/20 rounded-xl p-6">
               <div className="text-gray-400 text-sm mb-2">Current Balance</div>
@@ -152,25 +171,33 @@ export default function AdminDashboard() {
               <div className="text-sm text-gray-500">Available to withdraw</div>
             </div>
 
-            {/* Current Revenue */}
+            {/* Total Revenue */}
             <div className="bg-slate-900/50 backdrop-blur-lg border border-cyan-500/20 rounded-xl p-6">
-              <div className="text-gray-400 text-sm mb-2">Current Month Revenue</div>
-              <div className="text-3xl font-bold text-white mb-1">
-                ${currentRevenue.toLocaleString()}
+              <div className="text-gray-400 text-sm mb-2">Total Revenue</div>
+              <div className="text-3xl font-bold text-green-400 mb-1">
+                ${totalRevenue.toLocaleString()}
               </div>
-              <div className={`text-sm flex items-center ${revenueChange >= 0 ? 'text-green-400' : 'text-red-400'}`}>
-                <span className="mr-1">{revenueChange >= 0 ? '↑' : '↓'}</span>
-                {Math.abs(revenueChange).toLocaleString()} ({changePercent}%)
-              </div>
+              <div className="text-sm text-gray-500">Oct 2025 - Feb 2026</div>
             </div>
 
-            {/* Max Revenue */}
+            {/* Total Costs */}
             <div className="bg-slate-900/50 backdrop-blur-lg border border-cyan-500/20 rounded-xl p-6">
-              <div className="text-gray-400 text-sm mb-2">Revenue Cap</div>
-              <div className="text-3xl font-bold text-white mb-1">
-                ${maxRevenue.toLocaleString()}
+              <div className="text-gray-400 text-sm mb-2">Total Costs</div>
+              <div className="text-3xl font-bold text-red-400 mb-1">
+                ${totalCosts.toLocaleString()}
               </div>
-              <div className="text-sm text-gray-500">Maximum limit</div>
+              <div className="text-sm text-gray-500">Sept 2025 - Feb 2026</div>
+            </div>
+
+            {/* Net Profit */}
+            <div className="bg-slate-900/50 backdrop-blur-lg border border-cyan-500/20 rounded-xl p-6">
+              <div className="text-gray-400 text-sm mb-2">Net Profit</div>
+              <div className="text-3xl font-bold text-white mb-1">
+                ${netProfit.toLocaleString()}
+              </div>
+              <div className={`text-sm flex items-center ${netProfit >= 3000 ? 'text-green-400' : 'text-yellow-400'}`}>
+                {netProfit >= 3000 ? '✓' : '~'} Target range
+              </div>
             </div>
           </div>
 
